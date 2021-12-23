@@ -18,10 +18,18 @@ public class Game {
             }
         }
 
-        Piece piece = new Piece(Piece.pieceType.BACK_L);
-        piece.move(2, 0);
-        print();
+        Piece piece = new Piece(Piece.pieceType.L);
 
+        piece.move(-1, 5);
+        piece.rotate(1);
+        piece.move(0, 4);
+
+
+        Piece piece2 = new Piece(Piece.pieceType.SQUARE);
+        piece2.move(0, 7);
+
+        print();
+        System.out.println(piece2.canMove(0, 1));
 
     }
 
@@ -32,7 +40,7 @@ public class Game {
             }
             System.out.print("\n");
         }
-        System.out.println("----------------------");
+        System.out.println("-------------------");
     }
 
     public static void main(String[] args) {
