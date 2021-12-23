@@ -1,11 +1,12 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Game {
 
-    public static final int width = 10, height = 10;
+    public static final int width = 10, height = 20;
+
+    public final int blockFallDelayMillis = 1000;
 
     public static int[][] board;
 
@@ -25,11 +26,8 @@ public class Game {
         f.setSize(400,400);
         f.setFocusable(true);
 
-
-
-        currPiece = new Piece();
-        print();
-
+        currPiece = new Piece(Piece.pieceType.getRandomType());
+        int initTime = (int) System.currentTimeMillis();
 
         f.addKeyListener(new KeyListener() {
             @Override
@@ -43,29 +41,27 @@ public class Game {
                     case KeyEvent.VK_LEFT:
                         if(currPiece.canMove(-1,0)){
                             currPiece.move(-1,0);
-                            print();
                         }
                         break;
                     case KeyEvent.VK_RIGHT:
 
                         if(currPiece.canMove(1,0)){
                             currPiece.move(1,0);
-                            print();
                         }
                         break;
                     case KeyEvent.VK_DOWN:
                         if(currPiece.canMove(0,1)){
                             currPiece.move(0,1);
-                            print();
                         }
                         break;
                     case KeyEvent.VK_UP:
                         if (currPiece.canRotate(-1)) {
                             currPiece.rotate(-1);
-                            print();
                         }
                         break;
+
                 }
+                if (!currPiece.atBottom()) print();
             }
 
             @Override
@@ -74,20 +70,28 @@ public class Game {
             }
         });
 
+        boolean runGame = true;
 
+        Piece.pieceType type = Piece.pieceType.getRandomType();
+        while (runGame) {
+            int currTime = (int) System.currentTimeMillis();
+            if (currTime - initTime >= blockFallDelayMillis) {
+                print();
+                initTime = currTime;
 
-        /*Piece piece2 = new Piece(Piece.pieceType.T);
+                if (currPiece.atBottom()) {
+                    type = Piece.pieceType.getRandomType();
+                    runGame = Piece.canSpawnNewPiece(type);
+                    if (runGame) {
+                        currPiece = new Piece(type);
+                    }
+                    continue;
+                }
 
-        while (piece2.canMove(0 , 1)) {
-            piece2.move(0, 1);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                if (currPiece.canMove(0 , 1)) currPiece.move(0, 1);
             }
-            print();
-        } */
 
+        }
     }
 
     static public void print() {

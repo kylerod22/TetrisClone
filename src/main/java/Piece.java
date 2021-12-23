@@ -66,13 +66,22 @@ public class Piece {
         }
     }
 
+    public boolean atBottom() {
+        return (!canMove(0, 1));
+    }
 
-    public Piece() {
+    public static boolean canSpawnNewPiece(pieceType type) {
+        int middle = (Game.width / 2) - 1;
+        if (type == pieceType.BACK_L || type == pieceType.L) return (!(Game.board[2][middle] == 1));
+        return (!(Game.board[1][middle] == 1));
+    }
+
+
+    public Piece(pieceType type) {
         blockList = new ArrayList<>();
         localCoords = new ArrayList<>();
 
-        this.type = pieceType.getRandomType();
-
+        this.type = type;
 
         rowPos = 0;
         colPos = (Game.width / 2) - 1;
