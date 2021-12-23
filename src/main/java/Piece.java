@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Piece {
 
@@ -15,7 +16,12 @@ public class Piece {
         BACK_S,
         T,
         LINE,
-        SQUARE
+        SQUARE;
+
+        public static pieceType getRandomType() {
+            Random random = new Random();
+            return values()[random.nextInt(values().length)];
+        }
     }
 
     public boolean canMove(int dx, int dy) {
@@ -40,6 +46,7 @@ public class Piece {
     }
 
     public boolean canRotate(int dir) {
+        if (type == pieceType.SQUARE) return true; //Squares rotated are the same
         for (Block b : blockList) {
             if (!b.canRotate(dir, colPos, rowPos)) {
                 return false;
@@ -60,13 +67,11 @@ public class Piece {
     }
 
 
-
-
-
-    public Piece(pieceType type) {
+    public Piece() {
         blockList = new ArrayList<>();
         localCoords = new ArrayList<>();
-        this.type = type;
+
+        this.type = pieceType.getRandomType();
 
 
         rowPos = 0;

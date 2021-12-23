@@ -1,14 +1,15 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 public class Game {
 
     public static final int width = 10, height = 10;
 
     public static int[][] board;
-    /*Board is a matrix in this format:
-    0 1 2 3 4 5 6 7 8 9
-    10 11 12 13 14 15 16 17 18 19 ...
 
-    ...
-     */
+    public Piece currPiece;
 
     public Game() {
         board = new int[height][width];
@@ -18,18 +19,74 @@ public class Game {
             }
         }
 
-        Piece piece = new Piece(Piece.pieceType.L);
+        JFrame f = new JFrame("Tetris");
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setSize(400,400);
+        f.setFocusable(true);
 
-        piece.move(-1, 5);
-        piece.rotate(1);
-        piece.move(0, 4);
 
 
-        Piece piece2 = new Piece(Piece.pieceType.SQUARE);
-        piece2.move(0, 7);
-
+        currPiece = new Piece();
         print();
-        System.out.println(piece2.canMove(0, 1));
+
+
+        f.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_LEFT:
+                        if(currPiece.canMove(-1,0)){
+                            currPiece.move(-1,0);
+                            print();
+                        }
+                        break;
+                    case KeyEvent.VK_RIGHT:
+
+                        if(currPiece.canMove(1,0)){
+                            currPiece.move(1,0);
+                            print();
+                        }
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        if(currPiece.canMove(0,1)){
+                            currPiece.move(0,1);
+                            print();
+                        }
+                        break;
+                    case KeyEvent.VK_UP:
+                        if (currPiece.canRotate(-1)) {
+                            currPiece.rotate(-1);
+                            print();
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
+
+
+        /*Piece piece2 = new Piece(Piece.pieceType.T);
+
+        while (piece2.canMove(0 , 1)) {
+            piece2.move(0, 1);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            print();
+        } */
 
     }
 
@@ -40,10 +97,12 @@ public class Game {
             }
             System.out.print("\n");
         }
-        System.out.println("-------------------");
+        System.out.print("-----------------\n");
     }
 
     public static void main(String[] args) {
         new Game();
     }
 }
+
+
