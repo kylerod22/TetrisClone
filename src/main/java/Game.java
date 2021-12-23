@@ -1,16 +1,21 @@
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class Game {
 
-    public static final int width = 10, height = 20;
+    public static final int width = 10, height = 10;
 
     public final int blockFallDelayMillis = 1000;
 
     public static int[][] board;
 
     public Piece currPiece;
+
+    public static String filled = "■";
+    public static String empty = "□";
 
     public Game() {
         board = new int[height][width];
@@ -26,7 +31,8 @@ public class Game {
         f.setSize(400,400);
         f.setFocusable(true);
 
-        currPiece = new Piece(Piece.pieceType.getRandomType());
+        Piece.pieceType type = Piece.pieceType.getRandomType();
+        currPiece = new Piece(type);
         int initTime = (int) System.currentTimeMillis();
 
         f.addKeyListener(new KeyListener() {
@@ -72,7 +78,7 @@ public class Game {
 
         boolean runGame = true;
 
-        Piece.pieceType type = Piece.pieceType.getRandomType();
+
         while (runGame) {
             int currTime = (int) System.currentTimeMillis();
             if (currTime - initTime >= blockFallDelayMillis) {
@@ -80,6 +86,17 @@ public class Game {
                 initTime = currTime;
 
                 if (currPiece.atBottom()) {
+
+                    if (hasFilledRow()) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        updateFilledRows();
+                        //Update points here
+                    }
+
                     type = Piece.pieceType.getRandomType();
                     runGame = Piece.canSpawnNewPiece(type);
                     if (runGame) {
@@ -94,10 +111,43 @@ public class Game {
         }
     }
 
+    public boolean hasFilledRow() {
+        for (int i = 0; i < height; i++) {
+            int[] row = board[i];
+            if (IntStream.of(row).noneMatch(x -> x == 0)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void updateFilledRows() {
+        for (int i = 0; i < height; i++) {
+            int[] row = board[i];
+            if (IntStream.of(row).noneMatch(x -> x == 0)) {
+                Arrays.fill(row, 0);
+                for (int j = i; j >= 0; j--) {
+                    if (j == 0) Arrays.fill(board[j], 0);
+                    else {
+                        for (int k = 0; k < width; k++) {
+                            board[j][k] = board[j-1][k];
+                        }
+                    }
+                    print();
+                }
+                i--;
+            }
+        }
+    }
+
     static public void print() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                System.out.print(board[i][j] + " ");
+                if (board[i][j] == 0) {
+                    System.out.print(empty + " ");
+                } else {
+                    System.out.print(filled + " ");
+                }
             }
             System.out.print("\n");
         }

@@ -2,9 +2,6 @@ public class Block {
     public int col, row;
     public int[] localCoords;
 
-    String filled = "■";
-    String empty = "□";
-
     public Block(int inRow, int inCol, int inLocalX, int inLocalY) {
         localCoords = new int[2];
         col = inCol; row = inRow; localCoords[0] = inLocalX; localCoords[1] = inLocalY;

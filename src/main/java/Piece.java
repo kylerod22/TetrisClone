@@ -8,7 +8,6 @@ public class Piece {
     public static ArrayList<int[]> localCoords;
     private pieceType type;
 
-
     public enum pieceType {
         L,
         BACK_L,
