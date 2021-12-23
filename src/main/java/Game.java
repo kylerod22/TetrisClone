@@ -17,7 +17,11 @@ public class Game {
     public static String filled = "■";
     public static String empty = "□";
 
+    private static int points;
+    private int tetrisBasePoints = 100;
+
     public Game() {
+        points = 0;
         board = new int[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -122,15 +126,17 @@ public class Game {
     }
 
     public void updateFilledRows() {
+        int clearedRows = 0;
         for (int i = 0; i < height; i++) {
             int[] row = board[i];
             if (IntStream.of(row).noneMatch(x -> x == 0)) {
+                clearedRows++;
                 Arrays.fill(row, 0);
                 for (int j = i; j >= 0; j--) {
                     if (j == 0) Arrays.fill(board[j], 0);
                     else {
                         for (int k = 0; k < width; k++) {
-                            board[j][k] = board[j-1][k];
+                            board[j][k] = board[j-1][k]; //Have to replace by each value, not by row since they are pointers.
                         }
                     }
                     print();
@@ -138,6 +144,7 @@ public class Game {
                 i--;
             }
         }
+        points += tetrisBasePoints * Math.pow(2, clearedRows - 1);
     }
 
     static public void print() {
@@ -151,7 +158,7 @@ public class Game {
             }
             System.out.print("\n");
         }
-        System.out.print("-----------------\n");
+        System.out.print("------" + "POINTS: " + points + "------\n");
     }
 
     public static void main(String[] args) {
