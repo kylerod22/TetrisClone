@@ -1,11 +1,12 @@
 public class Block {
     public int col, row;
     public int[] localCoords;
+    int color;
 
-    public Block(int inRow, int inCol, int inLocalX, int inLocalY) {
+    public Block(int inRow, int inCol, int inLocalX, int inLocalY, int inColor) {
         localCoords = new int[2];
-        col = inCol; row = inRow; localCoords[0] = inLocalX; localCoords[1] = inLocalY;
-        GamePanel.board[row][col] = 1;
+        col = inCol; row = inRow; localCoords[0] = inLocalX; localCoords[1] = inLocalY; color = inColor;
+        GamePanel.board[row][col] = color;
     }
 
     public boolean canMove(int dx, int dy) {
@@ -41,7 +42,7 @@ public class Block {
         row += dy;
 
 
-        GamePanel.board[row][col] = 1;
+        GamePanel.board[row][col] = color;
 
     }
 
@@ -90,6 +91,6 @@ public class Block {
         row = newRow;
         localCoords[0] = newLocalX;
         localCoords[1] = newLocalY;
-        GamePanel.board[row][col] = 1;
+        GamePanel.board[row][col] = color;
     }
 }

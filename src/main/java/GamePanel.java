@@ -18,6 +18,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public static int[][] board;
 
+    final Color[] colors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA};
+
     public Piece currPiece;
 
     private static int points = 0;
@@ -96,13 +98,13 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.WHITE);
 
         if (board == null) return;
 
         for (int i = 0; i < Game.HEIGHT; i++) {
             for (int j = 0; j < Game.WIDTH; j++) {
-                if (board[i][j] == 1) {
+                if (board[i][j] >= 1) {
+                    g2.setColor(colors[board[i][j] - 1]);
                     g2.fillRect(j * pixelSize, i * pixelSize, pixelSize, pixelSize);
                 }
             }
@@ -138,18 +140,4 @@ public class GamePanel extends JPanel implements Runnable {
         }
         points += tetrisBasePoints * Math.pow(2, clearedRows - 1);
     }
-
-    /*static public void print() {
-        for (int i = 0; i < Game.HEIGHT; i++) {
-            for (int j = 0; j < Game.WIDTH; j++) {
-                if (board[i][j] == 0) {
-                    System.out.print(empty + " ");
-                } else {
-                    System.out.print(filled + " ");
-                }
-            }
-            System.out.print("\n");
-        }
-        System.out.print("------" + "POINTS: " + points + "------\n");
-    } */
 }

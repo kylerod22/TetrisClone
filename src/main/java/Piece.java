@@ -5,8 +5,8 @@ public class Piece {
 
     public int colPos, rowPos;
     public static ArrayList<Block> blockList;
-    public static ArrayList<int[]> localCoords;
     private pieceType type;
+    int color;
 
     public enum pieceType {
         L,
@@ -71,57 +71,69 @@ public class Piece {
 
     public static boolean canSpawnNewPiece(pieceType type) {
         int middle = (Game.WIDTH / 2) - 1;
-        if (type == pieceType.BACK_L || type == pieceType.L) return (!(GamePanel.board[2][middle] == 1));
-        return (!(GamePanel.board[1][middle] == 1));
+        if (type == pieceType.BACK_L || type == pieceType.L) return ((GamePanel.board[2][middle] == 0));
+        return ((GamePanel.board[1][middle] == 0));
     }
 
 
     public Piece(pieceType type) {
         blockList = new ArrayList<>();
-        localCoords = new ArrayList<>();
 
         this.type = type;
 
         rowPos = 0;
         colPos = (Game.WIDTH / 2) - 1;
 
-        blockList.add(new Block(0, colPos, 0, 0));
-        localCoords.add(new int[]{0,0});
+
         switch (type) {
             case L -> {
-                blockList.add(new Block(0, colPos + 1, 1, 0));
-                blockList.add(new Block(1, colPos, 0, 1));
-                blockList.add(new Block(2, colPos, 0, 2));
+                color = 1;
+                blockList.add(new Block(0, colPos, 0, 0, color));
+                blockList.add(new Block(0, colPos + 1, 1, 0, color));
+                blockList.add(new Block(1, colPos, 0, 1, color));
+                blockList.add(new Block(2, colPos, 0, 2, color));
             }
             case BACK_L -> {
-                blockList.add(new Block(0, colPos - 1, -1, 0));
-                blockList.add(new Block(1, colPos, 0, 1));
-                blockList.add(new Block(2, colPos, 0, 2));
+                color = 2;
+                blockList.add(new Block(0, colPos, 0, 0, color));
+                blockList.add(new Block(0, colPos - 1, -1, 0, color));
+                blockList.add(new Block(1, colPos, 0, 1, color));
+                blockList.add(new Block(2, colPos, 0, 2, color));
             }
             case S -> {
-                blockList.add(new Block(0, colPos - 1, -1, 0));
-                blockList.add(new Block(1, colPos, 0, 1));
-                blockList.add(new Block(1, colPos + 1, 1, 1));
+                color = 3;
+                blockList.add(new Block(0, colPos, 0, 0, color));
+                blockList.add(new Block(0, colPos - 1, -1, 0, color));
+                blockList.add(new Block(1, colPos, 0, 1, color));
+                blockList.add(new Block(1, colPos + 1, 1, 1, color));
             }
             case BACK_S -> {
-                blockList.add(new Block(0, colPos + 1, 1, 0));
-                blockList.add(new Block(1, colPos, 0, 1));
-                blockList.add(new Block(1, colPos - 1, -1, 1));
+                color = 4;
+                blockList.add(new Block(0, colPos, 0, 0, color));
+                blockList.add(new Block(0, colPos + 1, 1, 0, color));
+                blockList.add(new Block(1, colPos, 0, 1, color));
+                blockList.add(new Block(1, colPos - 1, -1, 1, color));
             }
             case T -> {
-                blockList.add(new Block(0, colPos - 1, -1, 0));
-                blockList.add(new Block(0, colPos + 1, 1, 0));
-                blockList.add(new Block(1, colPos,0, 1));
+                color = 5;
+                blockList.add(new Block(0, colPos, 0, 0, color));
+                blockList.add(new Block(0, colPos - 1, -1, 0, color));
+                blockList.add(new Block(0, colPos + 1, 1, 0, color));
+                blockList.add(new Block(1, colPos,0, 1, color));
             }
             case LINE -> {
-                blockList.add(new Block(0, colPos - 1, -1, 0));
-                blockList.add(new Block(0, colPos + 1, 1, 0));
-                blockList.add(new Block(0, colPos + 2, 2, 0));
+                color = 6;
+                blockList.add(new Block(0, colPos, 0, 0, color));
+                blockList.add(new Block(0, colPos - 1, -1, 0, color));
+                blockList.add(new Block(0, colPos + 1, 1, 0, color));
+                blockList.add(new Block(0, colPos + 2, 2, 0, color));
             }
             case SQUARE -> {
-                blockList.add(new Block(0, colPos + 1, 1, 0));
-                blockList.add(new Block(1, colPos, 0, 1));
-                blockList.add(new Block(1, colPos + 1, 1, 1));
+                color = 7;
+                blockList.add(new Block(0, colPos, 0, 0, color));
+                blockList.add(new Block(0, colPos + 1, 1, 0, color));
+                blockList.add(new Block(1, colPos, 0, 1, color));
+                blockList.add(new Block(1, colPos + 1, 1, 1, color));
             }
         }
     }

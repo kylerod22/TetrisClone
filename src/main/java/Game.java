@@ -12,7 +12,6 @@ public class Game {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setResizable(false);
 
-
         GamePanel panel = new GamePanel();
         f.add(panel);
         f.pack();
