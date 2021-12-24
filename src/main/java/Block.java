@@ -5,12 +5,12 @@ public class Block {
     public Block(int inRow, int inCol, int inLocalX, int inLocalY) {
         localCoords = new int[2];
         col = inCol; row = inRow; localCoords[0] = inLocalX; localCoords[1] = inLocalY;
-        Game.board[row][col] = 1;
+        GamePanel.board[row][col] = 1;
     }
 
     public boolean canMove(int dx, int dy) {
-        if (col + dx >= 0 && col + dx < Game.width && row + dy >= 0 && row + dy < Game.height) {
-            if (Game.board[row + dy][col + dx] == 0) {
+        if (col + dx >= 0 && col + dx < Game.WIDTH && row + dy >= 0 && row + dy < Game.HEIGHT) {
+            if (GamePanel.board[row + dy][col + dx] == 0) {
                 return true;
             } else {
                 for (Block b : Piece.blockList) {
@@ -35,13 +35,13 @@ public class Block {
             }
         }
 
-        if (!temp) Game.board[row][col] = 0;
+        if (!temp) GamePanel.board[row][col] = 0;
 
         col += dx;
         row += dy;
 
 
-        Game.board[row][col] = 1;
+        GamePanel.board[row][col] = 1;
 
     }
 
@@ -54,8 +54,8 @@ public class Block {
 
         if (localCoords[0] == 0 && localCoords[1] == 0) return true;
 
-        if (newCol >= 0 && newCol < Game.width && newRow >= 0 && newRow < Game.height) { //Bounds check
-            if (Game.board[newRow][newCol] == 0) {
+        if (newCol >= 0 && newCol < Game.WIDTH && newRow >= 0 && newRow < Game.HEIGHT) { //Bounds check
+            if (GamePanel.board[newRow][newCol] == 0) {
                 return true;
             } else {
                 for (Block b : Piece.blockList) { //Check if rotated coordinates match that of another block in the same Piece
@@ -84,12 +84,12 @@ public class Block {
             }
         }
 
-        if (!temp) Game.board[row][col] = 0;
+        if (!temp) GamePanel.board[row][col] = 0;
 
         col = newCol;
         row = newRow;
         localCoords[0] = newLocalX;
         localCoords[1] = newLocalY;
-        Game.board[row][col] = 1;
+        GamePanel.board[row][col] = 1;
     }
 }

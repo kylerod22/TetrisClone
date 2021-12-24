@@ -70,9 +70,9 @@ public class Piece {
     }
 
     public static boolean canSpawnNewPiece(pieceType type) {
-        int middle = (Game.width / 2) - 1;
-        if (type == pieceType.BACK_L || type == pieceType.L) return (!(Game.board[2][middle] == 1));
-        return (!(Game.board[1][middle] == 1));
+        int middle = (Game.WIDTH / 2) - 1;
+        if (type == pieceType.BACK_L || type == pieceType.L) return (!(GamePanel.board[2][middle] == 1));
+        return (!(GamePanel.board[1][middle] == 1));
     }
 
 
@@ -83,7 +83,7 @@ public class Piece {
         this.type = type;
 
         rowPos = 0;
-        colPos = (Game.width / 2) - 1;
+        colPos = (Game.WIDTH / 2) - 1;
 
         blockList.add(new Block(0, colPos, 0, 0));
         localCoords.add(new int[]{0,0});
