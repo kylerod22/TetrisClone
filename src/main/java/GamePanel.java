@@ -21,7 +21,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Piece currPiece;
 
     private static int points = 0;
-    private int tetrisBasePoints = 100;
+    private final int tetrisBasePoints = 100;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -46,25 +46,22 @@ public class GamePanel extends JPanel implements Runnable {
 
         boolean runGame = true;
         while (runGame) {
+            repaint();
             if ((int) System.currentTimeMillis() - initMoveTime >= moveDelayMillis) {
                 initMoveTime = (int) System.currentTimeMillis();
                 update();
             }
             if ((int) System.currentTimeMillis() - initFallTime >= blockFallDelayMillis) {
-
-                repaint();
                 initFallTime = (int) System.currentTimeMillis();
 
                 if (currPiece.atBottom()) {
                     if (hasFilledRow()) {
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(400);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         updateFilledRows();
-                        repaint();
-                        //Update points here
                     }
 
                     type = Piece.pieceType.getRandomType();
@@ -94,8 +91,6 @@ public class GamePanel extends JPanel implements Runnable {
         if (keyHandler.upPressed) {
             if (currPiece.canRotate(-1)) currPiece.rotate(-1);
         }
-
-        if (!currPiece.atBottom()) repaint();
     }
 
     public void paintComponent(Graphics g) {
@@ -135,7 +130,6 @@ public class GamePanel extends JPanel implements Runnable {
                 for (int j = i; j >= 0; j--) {
                     if (j == 0) Arrays.fill(board[j], 0);
                     else {
-                        //Have to replace by each value, not by row since they are pointers.
                         System.arraycopy(board[j - 1], 0, board[j], 0, Game.WIDTH);
                     }
                 }
