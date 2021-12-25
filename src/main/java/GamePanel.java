@@ -4,12 +4,11 @@ import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public class GamePanel extends JPanel implements Runnable {
-    private final int pixelSize = 32;
+    private final int pixelSize = 16;
+    private final int scale = 3;
     private final int borderRadius = 1;
-    private final int screenWidth = pixelSize * Game.WIDTH + 2 * pixelSize * borderRadius;
-    private final int screenHeight = pixelSize * Game.HEIGHT + 2 * pixelSize * borderRadius;
-    public static String filled = "■";
-    public static String empty = "□";
+    private final int screenWidth = scale * (pixelSize * Game.WIDTH + 2 * pixelSize * borderRadius);
+    private final int screenHeight = scale * (pixelSize * Game.HEIGHT + 2 * pixelSize * borderRadius);
 
     KeyHandler keyHandler = new KeyHandler();
 
@@ -58,15 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
                 initFallTime = (int) System.currentTimeMillis();
 
                 if (currPiece.atBottom()) {
-                    if (hasFilledRow()) {
-                        try {
-                            Thread.sleep(400);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        updateFilledRows();
-                    }
-
+                    if (hasFilledRow()) updateFilledRows();
                     type = Piece.pieceType.getRandomType();
                     runGame = Piece.canSpawnNewPiece(type);
                     if (runGame) {
@@ -108,7 +99,8 @@ public class GamePanel extends JPanel implements Runnable {
             for (int j = 0; j < Game.WIDTH; j++) {
                 if (board[i][j] >= 1) {
                     g2.setColor(colors[board[i][j] - 1]);
-                    g2.fillRect(j * pixelSize + borderRadius * pixelSize, i * pixelSize + borderRadius * pixelSize, pixelSize, pixelSize);
+                    g2.fillRect(scale * (j * pixelSize + borderRadius * pixelSize), scale * (i * pixelSize + borderRadius * pixelSize),
+                            scale * pixelSize, scale *pixelSize);
                 }
             }
         }
@@ -117,10 +109,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void drawBorder (Graphics2D g) {
         g.setColor(Color.GRAY);
-        g.fillRect(0, 0, screenWidth, pixelSize * borderRadius);
-        g.fillRect(0, screenHeight - borderRadius * pixelSize, screenWidth, pixelSize * borderRadius);
-        g.fillRect(0,0, pixelSize * borderRadius, screenHeight);
-        g.fillRect(screenWidth - borderRadius * pixelSize, 0, pixelSize * borderRadius, screenHeight);
+        g.fillRect(0, 0, screenWidth, scale * pixelSize * borderRadius);
+        g.fillRect(0, screenHeight - borderRadius * pixelSize * scale, screenWidth, scale * pixelSize * borderRadius);
+        g.fillRect(0,0, scale * pixelSize * borderRadius, screenHeight);
+        g.fillRect(screenWidth - borderRadius * pixelSize * scale, 0, scale * pixelSize * borderRadius, screenHeight);
     }
 
     public boolean hasFilledRow() {
