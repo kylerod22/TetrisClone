@@ -1,14 +1,20 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class GamePanel extends JPanel implements Runnable {
     private final int pixelSize = 16;
-    private final int scale = 3;
+    private final int scale = 2;
     private final int borderRadius = 1;
-    private final int screenWidth = scale * (pixelSize * Game.WIDTH + 2 * pixelSize * borderRadius);
-    private final int screenHeight = scale * (pixelSize * Game.HEIGHT + 2 * pixelSize * borderRadius);
+    private final int scoreAreaHeight = 3;
+    private final int screenWidth = scale * pixelSize * (Game.WIDTH + 2 * borderRadius);
+    private final int screenHeight = scale * pixelSize * (Game.HEIGHT + 2 * borderRadius + scoreAreaHeight);
+    private final int boardHeight = scale * pixelSize * (Game.HEIGHT + 2 * borderRadius);
 
     KeyHandler keyHandler = new KeyHandler();
 
@@ -100,19 +106,56 @@ public class GamePanel extends JPanel implements Runnable {
                 if (board[i][j] >= 1) {
                     g2.setColor(colors[board[i][j] - 1]);
                     g2.fillRect(scale * (j * pixelSize + borderRadius * pixelSize), scale * (i * pixelSize + borderRadius * pixelSize),
-                            scale * pixelSize, scale *pixelSize);
+                            scale * pixelSize , scale * pixelSize);
                 }
             }
         }
+
+
+
+        //Paint Score
+
+        drawScore(g2);
+        //g2.fillRect(0, boardHeight, scale * pixelSize, scale * pixelSize);
         g2.dispose();
     }
 
     public void drawBorder (Graphics2D g) {
         g.setColor(Color.GRAY);
         g.fillRect(0, 0, screenWidth, scale * pixelSize * borderRadius);
-        g.fillRect(0, screenHeight - borderRadius * pixelSize * scale, screenWidth, scale * pixelSize * borderRadius);
-        g.fillRect(0,0, scale * pixelSize * borderRadius, screenHeight);
-        g.fillRect(screenWidth - borderRadius * pixelSize * scale, 0, scale * pixelSize * borderRadius, screenHeight);
+        g.fillRect(0, boardHeight - borderRadius * pixelSize * scale, screenWidth, scale * pixelSize * borderRadius);
+        g.fillRect(0,0, scale * pixelSize * borderRadius, boardHeight);
+        g.fillRect(screenWidth - borderRadius * pixelSize * scale, 0, scale * pixelSize * borderRadius, boardHeight);
+    }
+
+    public void drawScore(Graphics2D g) {
+        String scoreLabel = "score ";
+        StringBuilder scoreString = new StringBuilder(Integer.toString(points));
+        int emptySpace = (screenWidth / scale / pixelSize) - scoreLabel.length();
+        if (scoreString.length() > emptySpace) {
+            scoreString = new StringBuilder();
+            while (scoreString.length() <= emptySpace) {
+                scoreString.append("9");
+            }
+        }
+
+        scoreLabel += scoreString;
+
+        for (int i = 0; i < scoreLabel.length(); i++) {
+            char c = scoreLabel.charAt(i);
+            if (c == ' ') continue;
+            BufferedImage image;
+            try {
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/gameRes/" + c + ".png")));
+                g.drawImage(image, i * scale * pixelSize, boardHeight + pixelSize * scale, scale * pixelSize, scale * pixelSize, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
+
     }
 
     public boolean hasFilledRow() {
