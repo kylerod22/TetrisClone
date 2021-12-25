@@ -55,7 +55,7 @@ public class Piece {
     }
 
     public void rotate(int dir) {
-        if (type == pieceType.SQUARE) return; //Squares rotated are the same
+        if (type == pieceType.SQUARE) return;
         if (dir == 1 || dir == -1) {
             if (canRotate(dir)) {
                 for (Block b : blockList) {
@@ -83,7 +83,6 @@ public class Piece {
 
         rowPos = 0;
         colPos = (Game.WIDTH / 2) - 1;
-
 
         switch (type) {
             case L -> {

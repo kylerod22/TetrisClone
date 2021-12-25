@@ -5,8 +5,9 @@ import java.util.stream.IntStream;
 
 public class GamePanel extends JPanel implements Runnable {
     private final int pixelSize = 32;
-    private final int screenWidth = pixelSize * Game.WIDTH;
-    private final int screenHeight = pixelSize * Game.HEIGHT;
+    private final int borderRadius = 1;
+    private final int screenWidth = pixelSize * Game.WIDTH + 2 * pixelSize * borderRadius;
+    private final int screenHeight = pixelSize * Game.HEIGHT + 2 * pixelSize * borderRadius;
     public static String filled = "■";
     public static String empty = "□";
 
@@ -101,15 +102,25 @@ public class GamePanel extends JPanel implements Runnable {
 
         if (board == null) return;
 
+        drawBorder(g2);
+
         for (int i = 0; i < Game.HEIGHT; i++) {
             for (int j = 0; j < Game.WIDTH; j++) {
                 if (board[i][j] >= 1) {
                     g2.setColor(colors[board[i][j] - 1]);
-                    g2.fillRect(j * pixelSize, i * pixelSize, pixelSize, pixelSize);
+                    g2.fillRect(j * pixelSize + borderRadius * pixelSize, i * pixelSize + borderRadius * pixelSize, pixelSize, pixelSize);
                 }
             }
         }
         g2.dispose();
+    }
+
+    public void drawBorder (Graphics2D g) {
+        g.setColor(Color.GRAY);
+        g.fillRect(0, 0, screenWidth, pixelSize * borderRadius);
+        g.fillRect(0, screenHeight - borderRadius * pixelSize, screenWidth, pixelSize * borderRadius);
+        g.fillRect(0,0, pixelSize * borderRadius, screenHeight);
+        g.fillRect(screenWidth - borderRadius * pixelSize, 0, pixelSize * borderRadius, screenHeight);
     }
 
     public boolean hasFilledRow() {
